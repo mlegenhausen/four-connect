@@ -1,8 +1,8 @@
 (function(window, document, undefined) {
 	"use strict";
 
-	function Player(name, color) {
-		this.color = color;
+	function Player(name, style) {
+		this.style = style;
 		this.name = name;
 	}
 
@@ -10,13 +10,13 @@
 	var COLUMNS = 7;
 
 	var players = [
-		new Player('Blau', '#0000FF'), 
-		new Player('Rot', '#FF0000')
+		new Player('Gelb', 'player-yellow'), 
+		new Player('Rot', 'player-red')
 	];
 	var current = 0;
 	var running = true;
 	var model = initModel();
-	var table = document.querySelector('tbody');
+	var table = document.getElementById('field');
 
 	function initModel() {
 		var model = [], row;
@@ -31,20 +31,19 @@
 	}
 
 	function renderPlayer() {
-		var elem = document.getElementById('player');
 		var player = players[current];
-		var message = player.name + (running ? ' ist am Zug.' : ' hat gewonnen!');
-		elem.innerHTML = message;
-		elem.style.color = player.color;
+		var elem = document.getElementById('player');
+		elem.innerHTML = player.name + (running ? ' ist am Zug.' : ' hat gewonnen!');
+		elem.className = player.style;
 	}
 
 	function renderModel() {
 		var cell, player;
 		for (var i = 0; i < model.length; i++) {
 			for (var j = 0; j < model[i].length; j++) {
-				cell = table.children[i].children[j];
+				cell = table.rows[i].cells[j];
 				player = model[i][j];
-				cell.style['background-color'] = player ? player.color : 'white';
+				cell.className = player ? player.style : '';
 			}
 		}
 	}
@@ -114,7 +113,7 @@
 		return false;
 	}
 
-	window.columnClick = function(col) {
+	function columnClick(col) {
 		if (!running) return false;
 
 		var row = -1;
@@ -131,7 +130,22 @@
 			}
 			renderModel();
 		}
-	};
+	}
 
+	function buildTable() {
+		var row, col;
+		for (var i = 0; i < ROWS; i++) {
+			row = document.createElement('tr');
+			for (var j = 0; j < COLUMNS; j++) {
+				col = document.createElement('td');
+				col.innerHTML = '&nbsp;';
+				col.onclick = columnClick.bind(this, j);
+				row.appendChild(col);
+			}
+			table.appendChild(row);
+		}
+	}
+
+	buildTable();
 	renderPlayer();
 })(window, document);

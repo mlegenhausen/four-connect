@@ -6,76 +6,41 @@
 <title>Vier Gewinnt</title>
 
 <style>
-* {
-	font-family:sans-serif;
-}
-td {
-	cursor:pointer;
-}
-p {
-	font-size:larger;
-}
+	* {
+		font-family:sans-serif;
+	}
+	table {
+		background-color:#0000FF;
+	}
+	td {
+		background-color:#FFFFFF;
+		cursor:pointer;
+		width:60px;
+		height:60px;
+		border-radius: 30px;
+		border: 1px solid;
+	}
+	p {
+		font-size:larger;
+	}
+	td.player-red {
+		background-color:#FF0000;
+	}
+	td.player-yellow {
+		background-color:#FFCC33;
+	}
+	span.player-red {
+		color:#FF0000;
+	}
+	span.player-yellow {
+		color:#FFCC33;
+	}
 </style>
 </head>
 <body style="width:450px; margin:0 auto;">
 	<h1>Vier Gewinnt</h1>
-	<table border="1" width="420" height="360" id="field">
-		<tr>
-			<td onclick="columnClick(0);">&nbsp;</td>
-			<td onclick="columnClick(1);">&nbsp;</td>
-			<td onclick="columnClick(2);">&nbsp;</td>
-			<td onclick="columnClick(3);">&nbsp;</td>
-			<td onclick="columnClick(4);">&nbsp;</td>
-			<td onclick="columnClick(5);">&nbsp;</td>
-			<td onclick="columnClick(6);">&nbsp;</td>
-		</tr>
-		<tr>
-			<td onclick="columnClick(0);">&nbsp;</td>
-			<td onclick="columnClick(1);">&nbsp;</td>
-			<td onclick="columnClick(2);">&nbsp;</td>
-			<td onclick="columnClick(3);">&nbsp;</td>
-			<td onclick="columnClick(4);">&nbsp;</td>
-			<td onclick="columnClick(5);">&nbsp;</td>
-			<td onclick="columnClick(6);">&nbsp;</td>
-		</tr>
-		<tr>
-			<td onclick="columnClick(0);">&nbsp;</td>
-			<td onclick="columnClick(1);">&nbsp;</td>
-			<td onclick="columnClick(2);">&nbsp;</td>
-			<td onclick="columnClick(3);">&nbsp;</td>
-			<td onclick="columnClick(4);">&nbsp;</td>
-			<td onclick="columnClick(5);">&nbsp;</td>
-			<td onclick="columnClick(6);">&nbsp;</td>
-		</tr>
-		<tr>
-			<td onclick="columnClick(0);">&nbsp;</td>
-			<td onclick="columnClick(1);">&nbsp;</td>
-			<td onclick="columnClick(2);">&nbsp;</td>
-			<td onclick="columnClick(3);">&nbsp;</td>
-			<td onclick="columnClick(4);">&nbsp;</td>
-			<td onclick="columnClick(5);">&nbsp;</td>
-			<td onclick="columnClick(6);">&nbsp;</td>
-		</tr>
-		<tr>
-			<td onclick="columnClick(0);">&nbsp;</td>
-			<td onclick="columnClick(1);">&nbsp;</td>
-			<td onclick="columnClick(2);">&nbsp;</td>
-			<td onclick="columnClick(3);">&nbsp;</td>
-			<td onclick="columnClick(4);">&nbsp;</td>
-			<td onclick="columnClick(5);">&nbsp;</td>
-			<td onclick="columnClick(6);">&nbsp;</td>
-		</tr>
-		<tr>
-			<td onclick="columnClick(0);">&nbsp;</td>
-			<td onclick="columnClick(1);">&nbsp;</td>
-			<td onclick="columnClick(2);">&nbsp;</td>
-			<td onclick="columnClick(3);">&nbsp;</td>
-			<td onclick="columnClick(4);">&nbsp;</td>
-			<td onclick="columnClick(5);">&nbsp;</td>
-			<td onclick="columnClick(6);">&nbsp;</td>
-		</tr>
-	</table>
 	<p><b>Spieler:</b> <span id="player"></span></p>
+	<table id="field"></table>
 	<script src="app.js"></script>
 </body>
 </html>
