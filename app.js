@@ -41,9 +41,8 @@
 		var cell, player;
 		for (var i = 0; i < model.length; i++) {
 			for (var j = 0; j < model[i].length; j++) {
-				cell = table.rows[i].cells[j];
 				player = model[i][j];
-				cell.className = player ? player.style : '';
+				table.rows[i].cells[j].className = player ? player.style : '';
 			}
 		}
 	}
@@ -138,7 +137,6 @@
 			row = document.createElement('tr');
 			for (var j = 0; j < COLUMNS; j++) {
 				col = document.createElement('td');
-				col.innerHTML = '&nbsp;';
 				col.onclick = columnClick.bind(this, j);
 				row.appendChild(col);
 			}
