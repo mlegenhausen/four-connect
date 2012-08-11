@@ -38,9 +38,9 @@
 	}
 
 	function renderModel() {
-		var cell, player;
-		for (var i = 0; i < model.length; i++) {
-			for (var j = 0; j < model[i].length; j++) {
+		var player;
+		for (var i = 0; i < ROWS; i++) {
+			for (var j = 0; j < COLUMNS; j++) {
 				player = model[i][j];
 				table.rows[i].cells[j].className = player ? player.style : '';
 			}
