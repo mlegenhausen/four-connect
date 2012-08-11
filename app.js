@@ -131,6 +131,20 @@
 		}
 	}
 
+	function columnMouseOver(col) {
+		for(var i = 0; i < ROWS; i++) {
+			table.rows[i].cells[col].className += ' column-hover';
+		}
+	}
+
+	function columnMouseOut(col) {
+		var cell;
+		for(var i = 0; i < ROWS; i++) {
+			cell = table.rows[i].cells[col];
+			cell.className = cell.className.replace(' column-hover', '');
+		}
+	}
+
 	function buildTable() {
 		var row, col;
 		for (var i = 0; i < ROWS; i++) {
@@ -138,6 +152,8 @@
 			for (var j = 0; j < COLUMNS; j++) {
 				col = document.createElement('td');
 				col.onclick = columnClick.bind(this, j);
+				col.onmouseover = columnMouseOver.bind(this, j);
+				col.onmouseout = columnMouseOut.bind(this, j);
 				row.appendChild(col);
 			}
 			table.appendChild(row);
