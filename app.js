@@ -6,6 +6,7 @@
 		this.name = name;
 	}
 
+	// Init consts
 	var ROWS = 6;
 	var COLUMNS = 7;
 	var STATE = {
@@ -14,6 +15,7 @@
 		EVEN: 'even'
 	};
 
+	// Init game vars
 	var players = [
 		new Player('Gelb', 'player-yellow'), 
 		new Player('Rot', 'player-red')
@@ -21,7 +23,10 @@
 	var current = 0;
 	var state = STATE.RUNNING;
 	var model = initModel();
-	var table = document.getElementById('field');
+
+	// Fetch DOM elements.
+	var $table = document.getElementById('field');
+	var $player = document.getElementById('player');
 
 	function initModel() {
 		var model = [], row;
@@ -37,7 +42,6 @@
 
 	function renderPlayer() {
 		var player = players[current];
-		var elem = document.getElementById('player');
 		var message = player.name;
 		var style = player.style;
 		if (state === STATE.RUNNING) {
@@ -48,8 +52,8 @@
 			message = 'Das Spiel endet unendschieden.';
 			style = 'even';
 		}
-		elem.innerHTML = message;
-		elem.className = style;
+		$player.innerHTML = message;
+		$player.className = style;
 	}
 
 	function renderModel() {
@@ -57,7 +61,7 @@
 		for (var i = 0; i < ROWS; i++) {
 			for (var j = 0; j < COLUMNS; j++) {
 				player = model[i][j];
-				table.rows[i].cells[j].className = player ? player.style : '';
+				$table.rows[i].cells[j].className = player ? player.style : '';
 			}
 		}
 	}
@@ -161,30 +165,30 @@
 
 	function columnMouseOver(col) {
 		for(var i = 0; i < ROWS; i++) {
-			table.rows[i].cells[col].className += ' column-hover';
+			$table.rows[i].cells[col].className += ' column-hover';
 		}
 	}
 
 	function columnMouseOut(col) {
-		var cell;
+		var $cell;
 		for(var i = 0; i < ROWS; i++) {
-			cell = table.rows[i].cells[col];
-			cell.className = cell.className.replace(' column-hover', '');
+			$cell = $table.rows[i].cells[col];
+			$cell.className = $cell.className.replace(' column-hover', '');
 		}
 	}
 
 	function buildTable() {
-		var row, col;
+		var $row, $col;
 		for (var i = 0; i < ROWS; i++) {
-			row = document.createElement('tr');
+			$row = document.createElement('tr');
 			for (var j = 0; j < COLUMNS; j++) {
-				col = document.createElement('td');
-				col.onclick = columnClick.bind(this, j);
-				col.onmouseover = columnMouseOver.bind(this, j);
-				col.onmouseout = columnMouseOut.bind(this, j);
-				row.appendChild(col);
+				$col = document.createElement('td');
+				$col.onclick = columnClick.bind(this, j);
+				$col.onmouseover = columnMouseOver.bind(this, j);
+				$col.onmouseout = columnMouseOut.bind(this, j);
+				$row.appendChild($col);
 			}
-			table.appendChild(row);
+			$table.appendChild($row);
 		}
 	}
 
