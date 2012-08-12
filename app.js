@@ -22,22 +22,26 @@
 	];
 	var current = 0;
 	var state = STATE.RUNNING;
-	var model = initModel();
+	var field = initField();
 
 	// Fetch DOM elements.
-	var $table = document.getElementById('field');
+	var $field = document.getElementById('field');
 	var $player = document.getElementById('player');
 
-	function initModel() {
-		var model = [], row;
-		for (var i = 0; i < ROWS; i++) {
+	function initField() {
+		var field = [];
+		var row; 
+		var i; 
+		var j;
+		
+		for (i = 0; i < ROWS; i++) {
 			row = [];
-			for (var j = 0; j < COLUMNS; j++) {
+			for (j = 0; j < COLUMNS; j++) {
 				row.push(null);
 			}
-			model.push(row);
+			field.push(row);
 		}
-		return model;
+		return field;
 	}
 
 	function renderPlayer() {
@@ -56,12 +60,15 @@
 		$player.className = style;
 	}
 
-	function renderModel() {
-		var player;
-		for (var i = 0; i < ROWS; i++) {
-			for (var j = 0; j < COLUMNS; j++) {
-				player = model[i][j];
-				$table.rows[i].cells[j].className = player ? player.style : '';
+	function renderField() {
+		var player; 
+		var i; 
+		var j;
+
+		for (i = 0; i < ROWS; i++) {
+			for (j = 0; j < COLUMNS; j++) {
+				player = field[i][j];
+				$field.rows[i].cells[j].className = player ? player.style : '';
 			}
 		}
 	}
@@ -71,15 +78,21 @@
 		renderPlayer();
 	}
 
-	function hasWon() {
-		var player = players[current];
-		var connectedColumns, connectedRows, connectedDiagonals;
+	// Check if the player has won
+	function hasWon(player) {
+		var connectedColumns;
+		var connectedRows;
+		var connectedDiagonals;
+		var i;
+		var j; 
+		var k; 
+		var l;
 
 		// Look for cols
-		for (var i = 0; i < COLUMNS; i++) {
+		for (i = 0; i < COLUMNS; i++) {
 			connectedColumns = 0;
-			for (var j = 0; j < ROWS; j++) {
-				if (model[j][i] === player) {
+			for (j = 0; j < ROWS; j++) {
+				if (field[j][i] === player) {
 					connectedColumns++;
 				} else {
 					connectedColumns = 0;
@@ -90,11 +103,11 @@
 			}
 		}
 
-		for (var i = 0; i < ROWS; i++) {
+		for (i = 0; i < ROWS; i++) {
 			connectedRows = 0;
-			for (var j = 0; j < COLUMNS; j++) {
+			for (j = 0; j < COLUMNS; j++) {
 				// Look for connected rows
-				if (model[i][j] === player) {
+				if (field[i][j] === player) {
 					connectedRows++;
 				} else {
 					connectedRows = 0;
@@ -105,8 +118,8 @@
 				// Look for connected diagonals
 				// Diagonals going to the right
 				connectedDiagonals = 0;
-				for (var k = i, l = j; k < ROWS && l < COLUMNS; k++, l++) {
-					if (model[k][l] === player) {
+				for (k = i, l = j; k < ROWS && l < COLUMNS; k++, l++) {
+					if (field[k][l] === player) {
 						connectedDiagonals++;
 					} else {
 						connectedDiagonals = 0;
@@ -117,8 +130,8 @@
 				}
 				// Diagonals going to the left
 				connectedDiagonals = 0;
-				for (var k = i, l = j; k < ROWS && l >= 0; k++, l--) {
-					if (model[k][l] === player) {
+				for (k = i, l = j; k < ROWS && l >= 0; k++, l--) {
+					if (field[k][l] === player) {
 						connectedDiagonals++;
 					} else {
 						connectedDiagonals = 0;
@@ -133,9 +146,12 @@
 	}
 
 	function isEven() {
-		for(var i = 0; i < ROWS; i++) {
-			for (var j = 0; j < COLUMNS; j++) {
-				if (!model[i][j]) return false;
+		var i; 
+		var j;
+		
+		for(i = 0; i < ROWS; i++) {
+			for (j = 0; j < COLUMNS; j++) {
+				if (!field[i][j]) return false;
 			}
 		}
 		return true;
@@ -145,53 +161,62 @@
 		if (state !== STATE.RUNNING) return false;
 
 		var row = -1;
-		for (var i = 0; i < ROWS; i++) {
-			if (!model[i][col]) row = i;
+		var	i;
+		
+		for (i = 0; i < ROWS; i++) {
+			if (!field[i][col]) row = i;
 		}
 		if (row > -1) {
-			model[row][col] = players[current];
+			field[row][col] = players[current];
 			if (isEven()) {
 				state = STATE.EVEN;
 				renderPlayer();
-			} else if (hasWon()) {
+			} else if (hasWon(players[current])) {
 				state = STATE.WON;
 				renderPlayer();
 			} else {
 				nextPlayer();
 			}
-			renderModel();
+			renderField();
 		}
 	}
 
 	function columnMouseOver(col) {
-		for(var i = 0; i < ROWS; i++) {
-			$table.rows[i].cells[col].className += ' column-hover';
+		var i;
+		for(i = 0; i < ROWS; i++) {
+			$field.rows[i].cells[col].className += ' column-hover';
 		}
 	}
 
 	function columnMouseOut(col) {
-		var $cell;
-		for(var i = 0; i < ROWS; i++) {
-			$cell = $table.rows[i].cells[col];
+		var $cell, 
+			i;
+		
+		for(i = 0; i < ROWS; i++) {
+			$cell = $field.rows[i].cells[col];
 			$cell.className = $cell.className.replace(' column-hover', '');
 		}
 	}
 
-	function buildTable() {
-		var $row, $col;
-		for (var i = 0; i < ROWS; i++) {
+	function buildField() {
+		var $row, 
+			$col, 
+			i, 
+			j;
+		
+		for (i = 0; i < ROWS; i++) {
 			$row = document.createElement('tr');
-			for (var j = 0; j < COLUMNS; j++) {
+			for (j = 0; j < COLUMNS; j++) {
 				$col = document.createElement('td');
 				$col.onclick = columnClick.bind(this, j);
 				$col.onmouseover = columnMouseOver.bind(this, j);
 				$col.onmouseout = columnMouseOut.bind(this, j);
 				$row.appendChild($col);
 			}
-			$table.appendChild($row);
+			$field.appendChild($row);
 		}
 	}
 
-	buildTable();
+	buildField();
 	renderPlayer();
 })(window, document);
