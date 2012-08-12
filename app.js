@@ -8,13 +8,18 @@
 
 	var ROWS = 6;
 	var COLUMNS = 7;
+	var STATE = {
+		RUNNING: 'running',
+		WON: 'won',
+		EVEN: 'even'
+	};
 
 	var players = [
 		new Player('Gelb', 'player-yellow'), 
 		new Player('Rot', 'player-red')
 	];
 	var current = 0;
-	var running = true;
+	var state = STATE.RUNNING;
 	var model = initModel();
 	var table = document.getElementById('field');
 
@@ -33,8 +38,18 @@
 	function renderPlayer() {
 		var player = players[current];
 		var elem = document.getElementById('player');
-		elem.innerHTML = player.name + (running ? ' ist am Zug.' : ' hat gewonnen!');
-		elem.className = player.style;
+		var message = player.name;
+		var style = player.style;
+		if (state === STATE.RUNNING) {
+			message += ' ist am Zug.';
+		} else if (state === STATE.WON) {
+			message += ' hat gewonnen!';
+		} else {
+			message = 'Das Spiel endet unendschieden.';
+			style = 'even';
+		}
+		elem.innerHTML = message;
+		elem.className = style;
 	}
 
 	function renderModel() {
@@ -54,9 +69,11 @@
 
 	function hasWon() {
 		var player = players[current];
+		var connectedColumns, connectedRows, connectedDiagonals;
+
 		// Look for cols
-		var connectedColumns = 0;
 		for (var i = 0; i < COLUMNS; i++) {
+			connectedColumns = 0;
 			for (var j = 0; j < ROWS; j++) {
 				if (model[j][i] === player) {
 					connectedColumns++;
@@ -69,9 +86,8 @@
 			}
 		}
 
-		var connectedRows = 0;
-		var connectedDiagonals = 0;
 		for (var i = 0; i < ROWS; i++) {
+			connectedRows = 0;
 			for (var j = 0; j < COLUMNS; j++) {
 				// Look for connected rows
 				if (model[i][j] === player) {
@@ -112,8 +128,17 @@
 		return false;
 	}
 
+	function isEven() {
+		for(var i = 0; i < ROWS; i++) {
+			for (var j = 0; j < COLUMNS; j++) {
+				if (!model[i][j]) return false;
+			}
+		}
+		return true;
+	}
+
 	function columnClick(col) {
-		if (!running) return false;
+		if (state !== STATE.RUNNING) return false;
 
 		var row = -1;
 		for (var i = 0; i < ROWS; i++) {
@@ -121,8 +146,11 @@
 		}
 		if (row > -1) {
 			model[row][col] = players[current];
-			if (hasWon()) {
-				running = false;
+			if (isEven()) {
+				state = STATE.EVEN;
+				renderPlayer();
+			} else if (hasWon()) {
+				state = STATE.WON;
 				renderPlayer();
 			} else {
 				nextPlayer();
